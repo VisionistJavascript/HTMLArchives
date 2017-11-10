@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Bouncing Bees</title>              
+<link rel="icon" href="https://escapeprograms104.files.wordpress.com/2015/12/bee.png" type="image/gif">
+</head>
+<body>
+	<h1 id="id">Bouncing Bees</h1>
+<canvas id = "canvas" width = "500" height = "500"></canvas>
+
+
+<script src = "https://code.jquery.com/jquery-2.1.0.js"></script>
+
+<script>
+
+//canvas
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+//drawing
+var circle = function(x,y,radius,fillCircle){	
+	ctx.beginPath();
+	ctx.arc(x,y,radius,0,Math.PI*2,false);
+	if (fillCircle){
+		ctx.fill();
+	}else{
+	ctx.stroke();
+}
+};
+
+var drawBee = function(x,y){
+ctx.lineWidth = 2;
+ctx.strokeStyle = 'Black';
+ctx.fillStyle = 'Gold';
+
+circle(x,y,8,true);
+circle(x,y,8,false);
+circle(x-5,y-11,5,false);
+circle(x+5,y-11,5,false);
+circle(x-2,y-1,2,false);
+circle(x+2,y-1,2,false);
+};
+
+//random things//
+var bees = 75;
+
+//set default speed
+var speed = 2;
+//speeds
+var maxspeed = 8;
+var increase = function(){
+	speed++;//update speed
+	if (speed > maxspeed){speed = 1;}//limit max speed
+	$("#speed").text("Speed: x"+speed);//print speed
+};
+
+var toggle = function(){
+	speed = maxspeed-speed+1;//reverse speed
+	$("#speed").text("Speed: x"+speed);//print speed
+};
+
+//canvas sizes
+var width = canvas.width,height = canvas.height;
+
+if (width !== height){alert("Red Alert! Make canvas size equal lengths");}
+
+//generate random position
+var update = function(coordinate){
+	var offset = Math.random()*speed-(speed/2);
+	coordinate +=offset;
+
+	if (coordinate > width) {
+		coordinate = width;
+	}
+	if (coordinate < 0){
+		coordinate = 0;
+	}
+	return coordinate;
+};
+/***Mommy's commisioned part***/
+//distance
+var dist = function(x1,y1,x2,y2){
+	var diffX = Math.abs(x1-x2);
+	var diffY = Math.abs(y1-y2);
+
+	var val = Math.sqrt((diffX*diffX)+(diffY*diffY));
+	return val;
+};
+//check if inside circle
+var bAppear = function(x,y){
+	if (dist(x,y,width/2,height/2)>150){
+		return true;
+	}else{
+		return false;
+	}
+};
+
+//positions
+var coords= [];
+var setPos = function(){
+for (var i= 0 ; i < bees; i ++){
+	//set pos
+	coords.push({
+		x : Math.random()*width,
+		y : Math.random()*height
+	});
+	//check if in condition zone
+	while (bAppear(coords[i].x,coords[i].y)){
+		coords.pop();
+		coords.push({
+		x : Math.random()*width,
+		y : Math.random()*height
+	});
+	}
+}
+};
+//End of commision
+setPos();
+//loop
+setInterval(function(){
+	//clear
+	ctx.clearRect(0,0,width,height);
+
+	//draw
+	for (var b = 0; b<bees; b++){
+	drawBee(coords[b].x,coords[b].y);
+	
+	//update position
+	coords[b].x = update(coords[b].x);
+	coords[b].y = update(coords[b].y);
+	}
+	//draw border
+	ctx.strokeRect(0,0,width,height);
+},30);
+
+</script>
+<br>
+<button onClick='increase()'>Increase speed</button>
+<button onClick='toggle()'>Toggle speed</button>
+<button onClick='print()'>Print</button>
+<p id = "speed"></p>
+</body> 
+</html>

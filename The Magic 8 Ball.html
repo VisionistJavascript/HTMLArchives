@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>The Magic 8 Ball</title>
+</head>
+<body>
+	<h1>Should I...</h1>
+	<script>
+	var replies = ["Maybe today.","Possibly.","Yes, definetly.","Concentrate and think again.","Not today.","Doing so would be a total disaster.","Why not?","Doing so would grant you great fortune.","My answer is unclear; think again.","Answer hazy; try again later.","This time I cannot help you.","While you do it, you shall die with honor.","Sorry; the jynx machine is out of order please put in another quarter."];
+
+	var giveReply = function(){
+		var index = Math.round(Math.random()*(replies.length-1));
+		alert(replies[index]);
+	};
+	</script>
+	<button onClick = "giveReply()">Click...and learn my decision...</button>
+</body>
+</html>

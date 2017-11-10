@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Keyboard Bees</title>
+</head>
+<body>
+	<canvas id = "canvas" width="400"height="400"></canvas>
+
+	<script src = "https://code.jquery.com/jquery-2.1.0.js"></script>
+	<script>
+//canvas
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+//canvas sizes
+var width = canvas.width,height = canvas.height;
+
+if (width !== height){alert("Red Alert! Make canvas size equal lengths");}
+
+//drawing
+var circle = function(x,y,radius,fillCircle){	
+	ctx.beginPath();
+	ctx.arc(x,y,radius,0,Math.PI*2,false);
+	if (fillCircle){
+		ctx.fill();
+	}else{
+	ctx.stroke();
+}
+};
+
+var drawBee = function(x,y){
+ctx.lineWidth = 2;
+ctx.strokeStyle = 'Black';
+ctx.fillStyle = 'Gold';
+
+circle(x,y,8,true);
+circle(x,y,8,false);
+circle(x-5,y-11,5,false);
+circle(x+5,y-11,5,false);
+circle(x-2,y-1,2,false);
+circle(x+2,y-1,2,false);
+};
+var drawBigBee = function(x,y){
+ctx.lineWidth = 2;
+ctx.strokeStyle = 'Purple';
+ctx.fillStyle = 'Gold';
+
+circle(x,y,12,true);
+circle(x,y,12,false);
+circle(x-5,y-11,5,false);
+circle(x+5,y-11,5,false);
+circle(x-2,y-1,2,false);
+circle(x+2,y-1,2,false);
+};
+//random things//
+var bees = 75;
+var masterPos = [width/2,height/2];
+var coords= [];
+
+//set default speed
+var speed = 2;
+//generate random position
+var update = function(coordinate){
+	var offset = Math.random()*speed-(speed/2);
+	coordinate +=offset;
+
+	if (coordinate > width) {
+		coordinate = width;
+	}
+	if (coordinate < 0){
+		coordinate = 0;
+	}
+	return coordinate;
+};
+
+var moveToMaster = function(id){
+	if (coords[id].x<masterPos[0]){
+		coords[id].x +=Math.random()*speed;
+	}else{
+		coords[id].x -=Math.random()*speed;
+	}
+
+	if (coords[id].y<masterPos[1]){
+		coords[id].y+=Math.random()*speed;
+	}else{
+		coords[id].y-=Math.random()*speed;
+	}
+};
+
+
+/***Mommy's commissioned part***/
+//distance
+var dist = function(x1,y1,x2,y2){
+	var diffX = Math.abs(x1-x2);
+	var diffY = Math.abs(y1-y2);
+
+	var val = Math.sqrt((diffX*diffX)+(diffY*diffY));
+	return val;
+};
+//check if inside circle
+var bAppear = function(x,y,cx,cy){//trial x, trial y, condition x, condition y
+	if (dist(x,y,cx,cy)>150){
+		return true;
+	}else{
+		return false;
+	}
+};
+
+//positions
+var setPos = function(masterX,masterY){
+for (var i= 0 ; i < bees; i ++){
+	//set position
+	coords.push({
+		x : Math.random()*width,
+		y : Math.random()*height
+	});
+	//check if in condition zone
+	while (bAppear(coords[i].x,coords[i].y,masterX,masterY)){
+		coords.pop();
+		coords.push({
+		x : Math.random()*width,
+		y : Math.random()*height
+	});
+	}
+}
+};
+//End of commission
+setPos(width/2,height/2);
+//keyBoard
+var keyNames = {
+		32 : "space",
+		37 : "left",
+		38 : "up",
+		39 : "right",
+		40 : "down"
+	};
+var bigbeeSpeed = speed+2;
+	$("body").keydown(function (event){
+		if (event.keyCode===37){masterPos[0]-=bigbeeSpeed;}
+		else if (event.keyCode===38){masterPos[1]-=bigbeeSpeed;}
+		else if (event.keyCode===39){masterPos[0]+=bigbeeSpeed;}
+		else if (event.keyCode===40){masterPos[1]+=bigbeeSpeed;}
+		$("#id").text(keyNames[event.keyCode]);
+	});
+//loop
+setInterval(function(){
+	//clear
+	ctx.clearRect(0,0,width,height);
+
+	//draw
+	for (var b = 0; b<bees; b++){
+	drawBee(coords[b].x,coords[b].y);
+	//update position
+	coords[b].x = update(coords[b].x);
+	coords[b].y = update(coords[b].y);
+	moveToMaster(b);
+	}
+	drawBigBee(masterPos[0],masterPos[1]);
+	//setPos(masterPos[0],masterPos[1]);
+	//draw border
+	ctx.strokeRect(0,0,width,height);
+},30);
+
+	</script>
+	<h2 id = "id"></h2>
+</body>

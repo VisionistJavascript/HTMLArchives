@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Hangman</title>
+</head>
+<body>
+<script>
+alert("Press OK to confirm load.");
+var myWindow;
+var wrongguesses = 0;
+
+var words = [
+"cool",
+"javascript",
+"balloon",
+"monkey",
+"cupcakes",
+"troll",
+"hotdog",
+"machine",
+"chicken",
+"recapiculation"
+];
+var word = words[Math.floor(Math.random() * words.length)];
+var quit = false;
+
+var answerArray = [];
+for (var i = 0; i < word.length; i++){answerArray[i] = '_';}
+
+var remainingLetters = word.length;
+var lettersguessed = [];
+//game
+while (remainingLetters > 0){
+	alert(answerArray.join(" ")+"\nYou have "+remainingLetters+" letters left.\nYou guessed the letters:\n"+lettersguessed.join(","));
+
+	var guess = prompt("Guess a letter:");
+
+if (lettersguessed.indexOf(guess)===-1){lettersguessed.push(guess);}
+
+	if (guess === null){
+		quit = true;
+		break;
+	}
+	else if (guess.length !==1){
+		alert("Enter a single letter.");
+	}
+	else{
+		//continue game
+		//var guessvalid = false;
+		for (var j = 0; j < word.length; j++){
+			
+			if (word[j] === guess){
+			answerArray[j] = guess;
+			remainingLetters--;
+			//if (lettersguessed.indexOf(guess)===-1){guessvalid=true;}
+			}
+		}
+		//if (!guessvalid){wrongguesses++;}
+		}
+	}
+//end game
+if (wrongguesses>7){
+	alert("You lost!");
+	quit=true;
+}
+if (quit){alert("Succesfully quit game.\nThe answer was "+ word);}
+else{
+	alert("You win!\n The answer is "+word);
+}
+var magic = confirm("This will redirect to Magic 8 Ball.");//window.open("http://www.w3schools.com", "_blank", "toolbar=no, scrollbars=no, resizable=no, top=500, left=500, width=400, height=400");
+if (magic){myWindow = window.open("file:///C:/Users/arky/Desktop/Webpages/The%20Magic%208%20Ball.html", "magic8", "toolbar=no, scrollbars=no, resizable=no, top=500, left=500, width=250, height=200");}
+</script>
+<button onClick='myWindow.close()'>Close Magic 8 Ball</button>
+<button onClick='myWindow = window.open("file:///C:/Users/arky/Desktop/Webpages/The%20Magic%208%20Ball.html", "magic8", "toolbar=no, scrollbars=no, resizable=no, top=500, left=500, width=400, height=400")'>Open Magic 8 Ball</button>
+</body>
+</html>

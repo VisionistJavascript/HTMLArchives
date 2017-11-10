@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Find the Buried Treasure</title>
+</head>
+<body>
+	<h1 id = "heading">Find the Buried Treasure (by clicking)</h1>
+	<img id = "map" width=700 height=500 src = "http://img3.wikia.nocookie.net/__cb20130726172143/b__/bloons/images/1/1f/Monkey_City.jpg">
+	<p id = "distance"></p>
+
+	<script src = "https://code.jquery.com/jquery-2.1.0.js"></script>
+	<script>
+	//functions
+		}
+		else if (distance< 20){
+			return "Super hot";
+		}
+		else if (distance< 40){
+			return "Hot";
+		}
+		else if (distance< 80){
+			return "Warm";
+		}
+		else if (distance< 160){
+			return "Cool";
+		}
+		else if (distance< 320){
+
+	var getRandomNumber = function(size){
+		return Math.floor(Math.random()*size);
+	};
+
+	var getDist = function(event,target){
+		var diffX = event.offsetX - target.x;
+		var diffY = event.offsetY - target.y;
+		return Math.sqrt((diffX*diffX)+(diffY*diffY));
+	};
+
+	var getDistanceHint = function(distance){
+		if (distance < 5){
+	alert("You found the treasure!");
+		}
+		else if (distance < 6){
+			return "SO CLOSE!!!!!!!!!!!!!!!!";
+		}
+		else if (distance< 10){
+			return "Boiling hot!";
+			return "Cold";
+		}
+		else {
+			return "Not even close";
+		}
+	};
+
+	//variables
+	var clicks = 0;
+	var width=700
+	var height=500;
+
+	var target = {
+		x : getRandomNumber(width),
+		y : getRandomNumber(height)
+	};
+
+
+	//handlers
+	$("#map").click(function(event){
+clicks++;
+var distance = getDist(event,target);
+var distanceHint = getDistanceHint(distance);
+$("#distance").text(distanceHint);
+});
+
+
+	</script>
+</body>
+</html>
